@@ -19,7 +19,8 @@ console.log("--- ACE League Bot Starting ---");
 
 // !!! PASTE YOUR FRESH TOKEN HERE !!!
 // https://www.haxball.com/headlesstoken
-const myToken = "thr1.AAAAAGmL0t1Om2A3PZIBnw.hs4DxIVqBYg"; 
+// Look for the token in the server's environment settings
+const myToken = process.env.HB_TOKEN;
 
 HaxballJS({
     roomName: "ACE Official Haxball League",
