@@ -1,19 +1,24 @@
-# Use a special "Puppeteer" image that comes with Chrome pre-installed
-FROM ghcr.io/puppeteer/puppeteer:23.3.0
+# Use the official Puppeteer image
+FROM ghcr.io/puppeteer/puppeteer:latest
 
-# Set the working directory
+# --- THE FIX: Switch to Administrator (Root) ---
+# This fixes the "Permission Denied" / Exit Code 243 error
+USER root
+
+# Set the folder
 WORKDIR /usr/src/app
 
-# Copy your files into the container
-COPY package*.json ./
-COPY bot.mjs ./
+# Copy the file that lists your requirements
+COPY package.json ./
 
-# Install dependencies
+# Tell the system we already have Chrome (don't download it again)
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+# Install the requirements (Now running as Root, so it won't fail!)
 RUN npm install
 
-# Tell Puppeteer to use the installed Chrome instead of downloading a new one
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+# Copy the rest of your bot code
+COPY bot.mjs ./
 
 # Start the bot
 CMD [ "node", "bot.mjs" ]
