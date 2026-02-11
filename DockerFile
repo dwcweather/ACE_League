@@ -1,0 +1,19 @@
+# Use a special "Puppeteer" image that comes with Chrome pre-installed
+FROM ghcr.io/puppeteer/puppeteer:23.3.0
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy your files into the container
+COPY package*.json ./
+COPY bot.mjs ./
+
+# Install dependencies
+RUN npm install
+
+# Tell Puppeteer to use the installed Chrome instead of downloading a new one
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+
+# Start the bot
+CMD [ "node", "bot.mjs" ]
